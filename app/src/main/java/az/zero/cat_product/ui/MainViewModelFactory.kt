@@ -2,7 +2,7 @@ package az.zero.cat_product.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import az.zero.cat_product.repository.Repository
+import az.zero.cat_product.data.repository.Repository
 
 class MainViewModelFactory(
     private val repository: Repository

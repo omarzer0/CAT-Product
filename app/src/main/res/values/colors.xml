@@ -10,4 +10,5 @@
 
     <color name="header_text_color">@color/black</color>
     <color name="price_text_color">@color/teal_700</color>
+    <color name="loading_bg_color">@android:color/holo_orange_dark</color>
 </resources>

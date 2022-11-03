@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import az.zero.cat_product.R
 import az.zero.cat_product.databinding.ItemProductBinding
-import az.zero.cat_product.models.Product
+import az.zero.cat_product.data.models.Product
 import com.bumptech.glide.Glide
 
 class ProductAdapter : ListAdapter<Product, ProductAdapter.ProductViewHolder>(ProductDiffUtils) {

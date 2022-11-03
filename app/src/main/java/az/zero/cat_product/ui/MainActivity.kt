@@ -8,6 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import az.zero.cat_product.core.MyApplication
 import az.zero.cat_product.core.ResponseState
 import az.zero.cat_product.databinding.ActivityMainBinding
+import az.zero.cat_product.data.models.Product
 import az.zero.cat_product.ui.adapters.ProductAdapter
 
 private const val TAG = "MainActivity"
@@ -26,33 +27,47 @@ class MainActivity : AppCompatActivity() {
         viewModel =
             ViewModelProvider(this, MainViewModelFactory(repository))[MainViewModel::class.java]
 
-        setUpRv()
+        setupViews()
         observeData()
     }
 
-    private fun setUpRv() {
-        binding.rvProducts.adapter = productAdapter
+    private fun setupViews() {
+        binding.apply {
+            rvProducts.adapter = productAdapter
+            root.apply {
+                setOnRefreshListener {
+                    viewModel.onRefresh()
+                    isRefreshing = false
+                }
+            }
+        }
     }
 
     private fun observeData() {
-        viewModel.productLD.observe(this) { productState ->
-            binding.pbLoading.isVisible = productState is ResponseState.Loading
+        viewModel.productsLD.observe(this) { productState ->
+            val isLoading = productState is ResponseState.Loading
+            val isError = productState is ResponseState.Error
+            val productsNotNullNorEmpty =
+                productState.data != null && productState.data.isNotEmpty()
+            val productsNotNullButEmpty =
+                productState.data != null && productState.data.isEmpty()
 
-            when (productState) {
-                is ResponseState.Error -> {
+            binding.apply {
+                pbLoading.isVisible = isLoading && productsNotNullButEmpty
+                cvLoadingLayout.isVisible = isLoading && productsNotNullNorEmpty
+                if (productsNotNullNorEmpty) updateAdapterData(productState.data!!)
+                if (isError) {
                     Toast.makeText(
-                        this,
+                        this@MainActivity,
                         "${productState.message ?: "Unknown error"}",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
-                is ResponseState.Loading -> {}
-                is ResponseState.Success -> {
-                    // submit to the adapter
-                    val products = productState.data?.products ?: return@observe
-                    productAdapter.submitList(products)
-                }
             }
         }
+    }
+
+    private fun updateAdapterData(products: List<Product>) {
+        productAdapter.submitList(products)
     }
 }
