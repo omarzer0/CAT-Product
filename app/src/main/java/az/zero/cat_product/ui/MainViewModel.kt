@@ -5,16 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import az.zero.cat_product.core.ResponseState
-import az.zero.cat_product.core.networkCall
 import az.zero.cat_product.data.models.Product
-import az.zero.cat_product.data.models.ProductResponse
 import az.zero.cat_product.data.repository.Repository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 private const val TAG = "MainViewModel"
 
-class MainViewModel(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val repository: Repository
 ) : ViewModel() {
 
@@ -37,3 +38,11 @@ class MainViewModel(
         getAllProducts()
     }
 }
+
+
+// owner ->
+// not owner ->
+
+// con
+// meth
+// ver
